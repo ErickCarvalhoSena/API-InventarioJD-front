@@ -23,6 +23,7 @@ export default function Home() {
   const [modelos, setModelos] = useState<Modelo[]>([]);
   const [modeloSelecionado, setModeloSelecionado] = useState<number | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
+  const [pecasSelecionadas, setPecasSelecionadas] = useState<number[]>([]);
   const [pecaEditando, setPecaEditando] = useState<Peca | null>(null);
   const [form, setForm] = useState({
     codigo: "",
@@ -122,6 +123,19 @@ export default function Home() {
     setPecas([]);
   }
 
+  async function deletarSelecionadas() {
+    if(!confirm(`Tem certeza que deseja excluir ${pecasSelecionadas.length} peça(s)?`)) return;
+
+    for(const id of pecasSelecionadas) {
+      await fetch (`http://localhost:5090/api/Pecas/${id}`, {
+        method: "DELETE",
+      });
+    }
+
+    setPecas(pecas.filter((p) => !pecasSelecionadas.includes(p.id)));
+    setPecasSelecionadas([]);
+  }
+
   return (
     <main className="min-h-screen bg-gray-100">
       <div className="bg-green-700 text-white text-center py-6">
@@ -173,12 +187,35 @@ export default function Home() {
           + Adicionar Peça
         </button>
 
+        {pecasSelecionadas.length > 0 && (
+          <button
+             onClick={deletarSelecionadas}
+             className="mb-4 ml-2 px-4 py-2 rounded font-semibold bg-red-100 text-red-700 hover:bg-red-200"
+             >
+              Excluir selecionadas ({pecasSelecionadas.length})
+             </button>
+        )}
+
         {pecas.length === 0 ? (
           <p className="text-gray-500">Nenhuma peça encontrada.</p>
         ) : (
           <div className="flex flex-col gap-4">
             {pecas.map((peca) => (
               <div key={peca.id} className="bg-white rounded-lg shadow p-4">
+                
+                <input
+                 type="checkbox"
+                 className="mb-2"
+                 checked={pecasSelecionadas.includes(peca.id)}
+                 onChange={(e) => {
+                  if(e.target.checked){
+                    setPecasSelecionadas([...pecasSelecionadas, peca.id]);
+                  } else {
+                     setPecasSelecionadas(pecasSelecionadas.filter((id) => id !== peca.id));
+                  }
+                 }}
+                 />
+                 
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-green-700">{peca.codigo}</h3>
                   <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">
