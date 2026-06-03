@@ -24,6 +24,7 @@ export default function Home() {
   const [modeloSelecionado, setModeloSelecionado] = useState<number | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [pecasSelecionadas, setPecasSelecionadas] = useState<number[]>([]);
+  const [ordenacao, setOrdenacao] = useState("padrao");
   const [pecaEditando, setPecaEditando] = useState<Peca | null>(null);
   const [form, setForm] = useState({
     codigo: "",
@@ -136,6 +137,14 @@ export default function Home() {
     setPecasSelecionadas([]);
   }
 
+  const pecasOrdenadas = [...pecas].sort((a, b) => {
+    if(ordenacao === "az") return a.descricao.localeCompare(b.descricao);
+    if(ordenacao === "za") return b.descricao.localeCompare(a.descricao);
+    if(ordenacao === "maior") return b.quantidade - a.quantidade;
+    if(ordenacao === "menor") return a.quantidade - b.quantidade;
+    return 0;
+  });
+
   return (
     <main className="min-h-screen bg-gray-100">
       <div className="bg-green-700 text-white text-center py-6">
@@ -195,12 +204,23 @@ export default function Home() {
               Excluir selecionadas ({pecasSelecionadas.length})
              </button>
         )}
+           <select 
+              className="mb-4 ml-2 border border-gray-700 rounded p-2 text-gray-900 focus:outline-none focus:border-green-500"
+              value={ordenacao}
+              onChange={(e) => setOrdenacao(e.target.value)}
+              >
+                <option value="padrao">Ordenar por...</option>
+                <option value="az">Descrição A - Z</option>
+                <option value="za">Descrição Z - A</option>
+                <option value="maior">Maior estoque</option>
+                <option value="menor">Menor estoque</option>
+              </select>
 
-        {pecas.length === 0 ? (
+        {pecasOrdenadas.length === 0 ? (
           <p className="text-gray-500">Nenhuma peça encontrada.</p>
         ) : (
           <div className="flex flex-col gap-4">
-            {pecas.map((peca) => (
+            {pecasOrdenadas.map((peca) => (
               <div key={peca.id} className="bg-white rounded-lg shadow p-4">
                 
                 <input
