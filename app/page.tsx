@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface Peca {
   id: number;
@@ -15,6 +16,7 @@ interface Modelo {
   id: number;
   nome: string;
   codigoJD?: string;
+  tipo?: string;
 }
 
 export default function Home() {
@@ -164,10 +166,21 @@ export default function Home() {
             <option value="">Todos os modelos</option>
             {modelos.map((modelo) => (
               <option key={modelo.id} value={modelo.id}>
-                {modelo.nome}
+                    {modelo.nome}
               </option>
             ))}
-          </select>
+              </select>
+
+          {modeloSelecionado && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+            {modelos.find((m) => m.id === modeloSelecionado)?.tipo === "colhedora" ? (
+              <Image src="/colheitadeira.png" alt="colhedora" width={20} height={20} />
+            ) : (
+              <span>🚜</span>
+            )}
+            <span>{modelos.find((m) => m.id === modeloSelecionado)?.nome}</span>
+            </div>
+          )}
 
           {modeloSelecionado && modelos.find((m) => m.id === modeloSelecionado)?.codigoJD && (
             <a
