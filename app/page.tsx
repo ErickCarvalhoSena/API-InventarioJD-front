@@ -24,6 +24,7 @@ export default function Home() {
   const [pecas, setPecas] = useState<Peca[]>([]);
   const [modelos, setModelos] = useState<Modelo[]>([]);
   const [modeloSelecionado, setModeloSelecionado] = useState<number | null>(null);
+  const [dropdownAberto, setDropdownAberto] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
   const [pecasSelecionadas, setPecasSelecionadas] = useState<number[]>([]);
   const [ordenacao, setOrdenacao] = useState("padrao");
@@ -49,11 +50,11 @@ export default function Home() {
     }
 
     const timer = setTimeout(async () => {
-    const params = new URLSearchParams();
-    if(busca) params.append("codigo",  busca);
-    if(modeloSelecionado) params.append("modeloId", modeloSelecionado.toString());
+      const params = new URLSearchParams();
+      if (busca) params.append("codigo", busca);
+      if (modeloSelecionado) params.append("modeloId", modeloSelecionado.toString());
 
-    const url = `http://localhost:5090/api/Pecas/Buscar?${params.toString()}`;
+      const url = `http://localhost:5090/api/Pecas/Buscar?${params.toString()}`;
 
       const res = await fetch(url);
       if (res.ok) {
@@ -127,10 +128,10 @@ export default function Home() {
   }
 
   async function deletarSelecionadas() {
-    if(!confirm(`Tem certeza que deseja excluir ${pecasSelecionadas.length} peça(s)?`)) return;
+    if (!confirm(`Tem certeza que deseja excluir ${pecasSelecionadas.length} peça(s)?`)) return;
 
-    for(const id of pecasSelecionadas) {
-      await fetch (`http://localhost:5090/api/Pecas/${id}`, {
+    for (const id of pecasSelecionadas) {
+      await fetch(`http://localhost:5090/api/Pecas/${id}`, {
         method: "DELETE",
       });
     }
@@ -140,45 +141,68 @@ export default function Home() {
   }
 
   const pecasOrdenadas = [...pecas].sort((a, b) => {
-    if(ordenacao === "az") return a.descricao.localeCompare(b.descricao);
-    if(ordenacao === "za") return b.descricao.localeCompare(a.descricao);
-    if(ordenacao === "maior") return b.quantidade - a.quantidade;
-    if(ordenacao === "menor") return a.quantidade - b.quantidade;
+    if (ordenacao === "az") return a.descricao.localeCompare(b.descricao);
+    if (ordenacao === "za") return b.descricao.localeCompare(a.descricao);
+    if (ordenacao === "maior") return b.quantidade - a.quantidade;
+    if (ordenacao === "menor") return a.quantidade - b.quantidade;
     return 0;
   });
 
   return (
-    <main className="min-h-screen bg-gray-100">
-      <div className="bg-green-700 text-white text-center py-6">
-        <h1 className="text-3xl font-bold">Oficina RGF</h1>
-        <p className="text-green-200">Controle de Estoque de Peças</p>
+  <main className="min-h-screen bg-gray-100">
+    
+      <div className="relative w-full h-52">
+        <Image
+          src="/BannerRGF1.jpeg"
+          alt="Banner Oficina RGF"
+          fill
+          className="object-cover object-[center_45%]"
+          priority
+        />
       </div>
 
       <div className="max-w-4xl mx-auto p-6">
         <h2 className="text-xl font-semibold mb-4 text-gray-800">Pesquisar Peças</h2>
 
         <div className="bg-white rounded-lg shadow p-4 mb-6 flex flex-col gap-3">
-          <select
-            className="w-full border border-gray-300 rounded p-2 text-gray-900 focus:outline-none focus:border-green-500"
-            value={modeloSelecionado ?? ""}
-            onChange={(e) => setModeloSelecionado(e.target.value ? Number(e.target.value) : null)}
-          >
-            <option value="">Todos os modelos</option>
-            {modelos.map((modelo) => (
-              <option key={modelo.id} value={modelo.id}>
+          <div className="relative">
+            <button
+              onClick={() => setDropdownAberto(!dropdownAberto)}
+              className="w-full border border-gray-300 rounded-lg p-3 text-left bg-white text-gray-900 flex justify-between items-center hover:border-green-500 focus:outline-none focus:border-green-500"
+            >
+              <span>{modeloSelecionado ? modelos.find((m) => m.id === modeloSelecionado)?.nome : "Todos os modelos"}</span>
+              <span className="text-gray-400">{dropdownAberto ? "▲" : "▼"}</span>
+            </button>
+
+            {dropdownAberto && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                <div
+                  onClick={() => { setModeloSelecionado(null); setDropdownAberto(false); }}
+                  className="px-4 py-3 cursor-pointer hover:bg-green-50 hover:text-green-700 rounded-t-lg font-medium text-gray-700"
+                >
+                  Todos os modelos
+                </div>
+                {modelos.map((modelo) => (
+                  <div
+                    key={modelo.id}
+                    onClick={() => { setModeloSelecionado(modelo.id); setDropdownAberto(false); }}
+                    className={`px-4 py-3 cursor-pointer hover:bg-green-50 hover:text-green-700 text-gray-700 ${modeloSelecionado === modelo.id ? "bg-green-50 text-green-700 font-medium" : ""}`}
+                  >
                     {modelo.nome}
-              </option>
-            ))}
-              </select>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           {modeloSelecionado && (
             <div className="flex items-center gap-2 text-sm text-gray-600">
-            {modelos.find((m) => m.id === modeloSelecionado)?.tipo === "colhedora" ? (
-              <Image src="/colheitadeira.png" alt="colhedora" width={20} height={20} />
-            ) : (
-              <span>🚜</span>
-            )}
-            <span>{modelos.find((m) => m.id === modeloSelecionado)?.nome}</span>
+              {modelos.find((m) => m.id === modeloSelecionado)?.tipo === "colhedora" ? (
+                <Image src="/colheitadeira.png" alt="colhedora" width={20} height={20} />
+              ) : (
+                <span>🚜</span>
+              )}
+              <span>{modelos.find((m) => m.id === modeloSelecionado)?.nome}</span>
             </div>
           )}
 
@@ -211,23 +235,23 @@ export default function Home() {
 
         {pecasSelecionadas.length > 0 && (
           <button
-             onClick={deletarSelecionadas}
-             className="mb-4 ml-2 px-4 py-2 rounded font-semibold bg-red-100 text-red-700 hover:bg-red-200"
-             >
-              Excluir selecionadas ({pecasSelecionadas.length})
-             </button>
+            onClick={deletarSelecionadas}
+            className="mb-4 ml-2 px-4 py-2 rounded font-semibold bg-red-100 text-red-700 hover:bg-red-200"
+          >
+            Excluir selecionadas ({pecasSelecionadas.length})
+          </button>
         )}
-           <select 
-              className="mb-4 ml-2 border border-gray-700 rounded p-2 text-gray-900 focus:outline-none focus:border-green-500"
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-              >
-                <option value="padrao">Ordenar por...</option>
-                <option value="az">Descrição A - Z</option>
-                <option value="za">Descrição Z - A</option>
-                <option value="maior">Maior estoque</option>
-                <option value="menor">Menor estoque</option>
-              </select>
+        <select
+          className="mb-4 ml-2 border border-gray-700 rounded p-2 text-gray-900 focus:outline-none focus:border-green-500"
+          value={ordenacao}
+          onChange={(e) => setOrdenacao(e.target.value)}
+        >
+          <option value="padrao">Ordenar por...</option>
+          <option value="az">Descrição A - Z</option>
+          <option value="za">Descrição Z - A</option>
+          <option value="maior">Maior estoque</option>
+          <option value="menor">Menor estoque</option>
+        </select>
 
         {pecasOrdenadas.length === 0 ? (
           <p className="text-gray-500">Nenhuma peça encontrada.</p>
@@ -235,20 +259,20 @@ export default function Home() {
           <div className="flex flex-col gap-4">
             {pecasOrdenadas.map((peca) => (
               <div key={peca.id} className="bg-white rounded-lg shadow p-4">
-                
+
                 <input
-                 type="checkbox"
-                 className="mb-2"
-                 checked={pecasSelecionadas.includes(peca.id)}
-                 onChange={(e) => {
-                  if(e.target.checked){
-                    setPecasSelecionadas([...pecasSelecionadas, peca.id]);
-                  } else {
-                     setPecasSelecionadas(pecasSelecionadas.filter((id) => id !== peca.id));
-                  }
-                 }}
-                 />
-                 
+                  type="checkbox"
+                  className="mb-2"
+                  checked={pecasSelecionadas.includes(peca.id)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setPecasSelecionadas([...pecasSelecionadas, peca.id]);
+                    } else {
+                      setPecasSelecionadas(pecasSelecionadas.filter((id) => id !== peca.id));
+                    }
+                  }}
+                />
+
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-green-700">{peca.codigo}</h3>
                   <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">
