@@ -49,11 +49,11 @@ export default function Home() {
     }
 
     const timer = setTimeout(async () => {
-      let url = `http://localhost:5090/api/Pecas/${busca}`;
+    const params = new URLSearchParams();
+    if(busca) params.append("codigo",  busca);
+    if(modeloSelecionado) params.append("modeloId", modeloSelecionado.toString());
 
-      if (modeloSelecionado && busca.length === 0) {
-        url = `http://localhost:5090/api/Pecas/modelo/${modeloSelecionado}`;
-      }
+    const url = `http://localhost:5090/api/Pecas/Buscar?${params.toString()}`;
 
       const res = await fetch(url);
       if (res.ok) {
