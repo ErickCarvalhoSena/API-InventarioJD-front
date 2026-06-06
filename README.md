@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚜 Oficina RGF — Sistema de Estoque de Peças (Frontend)
 
-## Getting Started
+Sistema web de gerenciamento de estoque de peças para tratores e colhedoras John Deere, desenvolvido para a Oficina RGF.
 
-First, run the development server:
+![Preview do sistema](screenshot.png)
+
+## 📋 Sobre o Projeto
+
+A Oficina RGF especializada em tratores e colhedoras John Deere precisava de uma forma de controlar o estoque de peças. Sem um sistema, era comum comprar peças que já existiam no estoque ou perder vendas por não saber o que tinha disponível.
+
+Este sistema resolve esse problema com uma interface simples e rápida para consulta e gerenciamento do estoque.
+
+## ✨ Funcionalidades
+
+- 🔍 Pesquisa de peças em tempo real por código (busca parcial)
+- 🚜 Filtro por modelo de máquina (tratores e colhedoras)
+- ➕ Cadastro de novas peças com modelos compatíveis
+- ✏️ Edição de peças existentes
+- 🗑️ Exclusão individual ou múltipla de peças
+- 📊 Ordenação por descrição (A→Z, Z→A) e quantidade
+- 🔗 Link direto para o catálogo oficial John Deere
+
+## 🛠️ Tecnologias
+
+- [Next.js 15] — framework React
+- [TypeScript] — tipagem estática
+- [Tailwind CSS] — estilização
+- [React Hooks] — `useState`, `useEffect`
+
+## 🚀 Como Rodar
+
+### Pré-requisitos
+
+- Node.js 18+
+- API do projeto rodando ([repositório da API](https://github.com/seu-usuario/API-InventarioJD))
+
+### Instalação
 
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/API-InventarioJD-front.git
+
+# Entre na pasta
+cd API-InventarioJD-front
+
+# Instale as dependências
+npm install
+
+# Rode o projeto
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse `http://localhost:3000` no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Estrutura do Projeto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+oficina-jd-web/
+├── src/
+│   └── app/
+│       ├── page.tsx        # Página principal
+│       ├── layout.tsx      # Layout base
+│       └── globals.css     # Estilos globais
+└── public/
+    └── colheitadeira.png   # Ícone de colhedora
+```
 
-## Learn More
+## 🔗 Repositórios Relacionados
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [API — OficinaJD.API](https://github.com/seu-usuario/OficinaJD-API)
