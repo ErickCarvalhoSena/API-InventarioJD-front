@@ -2,8 +2,6 @@
 
 Sistema web de gerenciamento de estoque de peças para tratores e colhedoras John Deere, desenvolvido para a Oficina RGF.
 
-![Preview do sistema](screenshot.png)
-
 ## 📋 Sobre o Projeto
 
 A Oficina RGF especializada em tratores e colhedoras John Deere precisava de uma forma de controlar o estoque de peças. Sem um sistema, era comum comprar peças que já existiam no estoque ou perder vendas por não saber o que tinha disponível.
@@ -32,13 +30,13 @@ Este sistema resolve esse problema com uma interface simples e rápida para cons
 ### Pré-requisitos
 
 - Node.js 18+
-- API do projeto rodando ([repositório da API](https://github.com/seu-usuario/API-InventarioJD))
+- API do projeto rodando ([repositório da API](https://github.com/ErickCarvalhoSena/API-InventarioJD))
 
 ### Instalação
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/API-InventarioJD-front.git
+git clone https://github.com/ErickCarvalhoSena/API-InventarioJD-front.git
 
 # Entre na pasta
 cd API-InventarioJD-front
@@ -67,4 +65,4 @@ oficina-jd-web/
 
 ## 🔗 Repositórios Relacionados
 
-- [API — OficinaJD.API](https://github.com/seu-usuario/OficinaJD-API)
+- [API — OficinaJD.API](https://github.com/ErickCarvalhoSena/OficinaJD-API)
