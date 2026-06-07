@@ -50,8 +50,11 @@ export default function Home() {
     }
 
     const timer = setTimeout(async () => {
-      const params = new URLSearchParams();
-      if (busca) params.append("codigo", busca);
+    const params = new URLSearchParams();
+      if(busca){
+        params.append("codigo", busca);
+        params.append("descricao", busca);
+      }
       if (modeloSelecionado) params.append("modeloId", modeloSelecionado.toString());
 
       const url = `http://localhost:5090/api/Pecas/Buscar?${params.toString()}`;
