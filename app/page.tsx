@@ -117,11 +117,15 @@ export default function Home() {
         body: JSON.stringify(body),
       });
     } else {
-      await fetch("http://localhost:5090/api/Pecas", {
+      const response = await fetch("http://localhost:5090/api/Pecas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      if (response.status === 409){
+        alert("Já existe uma peça com esse código!");
+        return;
+      }
     }
 
     setModalAberto(false);
